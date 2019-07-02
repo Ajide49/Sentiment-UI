@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-light navbar-fixed-top navCustom navBorder"  >
+ <span class="navbar-brand text-primary"><strong><i class=""></i> Sentiment Analysis Dashboard</strong>
+ </span>
+
+  <div class=" navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+
+      </li>
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0 text-primary">
+      <a class="nav-link text-primary" (click)="onClickPage('Dashboard')"> <i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      |
+      <a class="nav-link text-primary" (click)="onClickPage('Configure')"> <i class="fas fa-cogs"></i> Configure</a>
+    </form>
+  </div>
+</nav>
+<!-- Page Content Holder -->
+<div id="content" class="container-fluid">
+  <div class="container-fluid bg-white h-100 d-inline-block" id="main">
+    <router-outlet class="col d-felx flex-column"></router-outlet>
+
+
+    <div class="container-fluid bg-white h-100 d-inline-block" *ngIf="page=='Dashboard'">
+      <app-dashboard>
+
+      </app-dashboard>
+    </div>
+
+    <div class="container-fluid bg-white h-100 d-inline-block" *ngIf="page=='Configure'">
+      <app-configure>
+
+      </app-configure>
+    </div>
+  </div>
+</div>

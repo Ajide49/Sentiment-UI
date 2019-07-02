@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.card{
+  //  box-shadow: 5px 10px 8px #888888;
+}
+
+.border-gradient-purple {
+    border-image: linear-gradient(to left, #743ad5, #d53a9d);
+  }
+
+  .border-gradient {
+    border-image-slice: 1;
+    border-width: 2px;
+  }

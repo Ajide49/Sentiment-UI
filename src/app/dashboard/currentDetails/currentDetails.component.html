@@ -1,0 +1,80 @@
+<style>
+  hr { 
+      display: block;
+      margin-top: 0.0em;
+      margin-bottom: 0.0em;
+      margin-left: auto;
+      margin-right: auto;
+      border-style: inset;
+      border-width: 1px;
+    } 
+</style>
+<div class="col-md-12">
+  <h5 class="text-primary"><strong>
+      <i class="fab fa-linode"></i> {{selectedService}}</strong>
+  </h5>
+
+  <div class="col-md-12">
+
+    <div>
+      <ng-container #outlet>
+      </ng-container>
+    </div>
+
+    <ng-template #content>
+      <aggregatedServiceMetrics [serviceAggregatedMetricsData]="serviceAggregatedMetricsData"
+        [servicePercentages]="servicePercentages" [serviceName]="serviceName"></aggregatedServiceMetrics>
+    </ng-template>
+
+    <div class="col-md-12" *ngFor="let metadata of selectedConfig.metadata" style="margin:2em;">
+
+      <div class="row">
+        <div class="col-md-2 card bg-dark text-white" id="trendsGraphContainer">
+          <div class="row">
+            <div class="col-md-12 text-center" style="align-content: center" style="margin:1em;">
+              <h2>
+                <customPill [percentage]="metadataPercentages[metadata.name]">
+                  {{metadataPercentages[metadata.name].toFixed(2)}}<i class="fas fa-percent"></i></customPill>
+              </h2>
+            </div>
+            <div class="col-md-12 text-center">
+              <h6 class="text-white serviceName">
+                <strong>{{metadata.description}}</strong>
+               
+                <!--span class="badge badge-pill badge-success" style="float: right" id="mainButton">Total: 65%</span-->
+              </h6>
+            </div>
+            <div class="col-md-12 text-center">
+              <span class="text-white serviceName">
+                <!--span class="badge badge-pill badge-success" style="float: right" id="mainButton">Total: 65%</span-->
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-10 card " id="trendGraphCard">
+            <div style="display: block" class="trendGraph" *ngIf="graph=='graph1'">
+              <availabilityChart [metricsData]="metricsData[selectedService][metadata.name]"
+                [(metadataName)]="metadata.name"></availabilityChart >
+                <hr/>
+             <div class="col-md-12 center"> 
+              <span class="badge badge-white">
+                SLO Threshold for the service is {{operators[metadata.comparisonOperator]}} {{metadata.slo}}{{metadata.units}}
+             </span>
+            </div>
+            <!--customSamTimeChart></customSamTimeChart-->
+          </div>
+          <div style="display: block" class="trendGraph" *ngIf="graph=='graph2'">
+            <timelineChart [metricsData]="metricsData[selectedService][metadata.name]" [(metadataName)]="metadata.name">
+            </timelineChart>
+
+            <!--customSamTimeChart></customSamTimeChart-->
+          </div>
+        </div>
+        <hr>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

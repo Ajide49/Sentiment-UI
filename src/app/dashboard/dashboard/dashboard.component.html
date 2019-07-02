@@ -1,0 +1,43 @@
+<div class="col-md-12 ">
+  <!--REDDIT = CURRENT-->
+  <div class="btn-group  btn-group-toggle" data-toggle="buttons">
+    <label class="btn btn-outline-primary btn-md" [ngClass]="{'active':page === 'newCurrent'}">
+      <input type="radio" name="options" id="option3" autocomplete="off" (click)="pageChanged('newCurrent')"><i class="fas fa-chart-line"></i>
+      Reddit<sup class="text-success"></sup>
+    </label>
+  <!--TWITTER = TRENDING-->
+    <label class="btn btn-outline-primary btn-md" [ngClass]="{'active':page === 'trending'}">
+      <input type="radio" name="options" id="option3" autocomplete="off" (click)="pageChanged('trending')"><i class="fas fa-chart-line"></i>
+      Twitter
+    </label>
+  </div>
+</div>
+
+<loader [loader]="loader"></loader>
+
+<section class="col-md-12 page-header" *ngIf="page=='newCurrent'">
+  <h4 class="text-primary">
+    <i class="fas fa-chart-line"></i> Reddit <sup class="text-success"></sup></h4>
+  <hr />
+
+  <div class="col-md-12">
+    <current></current>
+  </div>
+</section>
+
+
+
+<section class="col-md-12 page-header" *ngIf="page=='trending'">
+  <h4 class="text-primary">
+    <i class="fas fa-chart-line"></i> Twitter</h4>
+  <hr />
+</section>
+
+
+<div class="col-md-12" *ngIf="page=='trending'">
+  <trending [configData]="configData"></trending>
+</div>
+
+<div class="col-md-12" *ngIf="page=='current'">
+  <iframe src="http://core-ticketing.git.tmaws.io/availability/" style="width:100%;min-height: 100vh"></iframe>
+</div>

@@ -1,0 +1,14 @@
+<loader [loader]="!dataLoaded">Loading</loader>
+<div #parentGraph class="col-md-12" *ngIf="dataAvailable">
+  <ngx-charts-bar-vertical [view]="view" [scheme]="colorScheme" [results]="single" [gradient]="gradient" [xAxis]="showXAxis"
+    [yAxis]="showYAxis" [legend]="showLegend" [showDataLabel]="showDataLabels" [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" yScaleMax="100" yScaleMin="80" roundEdges="false"
+    [showGridLines]="showGridLines" [yAxisLabel]="yAxisLabel" (select)="onSelect($event)" *ngIf="dataLoaded">
+  </ngx-charts-bar-vertical>
+</div>
+
+<div class="col-md-12 no-data" *ngIf="!dataAvailable">
+    <div class="alert alert-dismissible alert-light">
+        <strong><i class="fas fa-exclamation-circle"></i> No Data.</strong> Enough data has not been collected for this component.
+    </div>
+</div>

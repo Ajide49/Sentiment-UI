@@ -1,0 +1,113 @@
+<ng-template #modalUpdate let-metadata>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Update metadata Values</h4>
+        <!--button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          span aria-hidden="true">&times;</span
+        </button>-->
+    </div>
+    <div class="modal-body">
+        <!--loader [loader]="saveLoader"></loader-->
+        <form [formGroup]="metadataForm">
+            <div class="row">
+                
+
+                <div class="col-md-6">
+                    <label class="control-label col-sm-12">
+                        Description
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="text" style="min-width: 2em;" placeholder="p95"
+                            class="form-control form-control-md" validationStyle formControlName="description">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="control-label col-sm-12">
+                        Endpoint
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="text" style="min-width: 2em;"
+                            placeholder="http://prometheus.prd192-fed.prod3.us-east-1.tktm.io"
+                            class="form-control form-control-md" validationStyle formControlName="endpoint">
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <label class="control-label col-sm-12">
+                        Key
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="text" style="min-width: 2em;"
+                            placeholder="maps_service_vector_geometry_place_detail_response_time"
+                            class="form-control form-control-md" validationStyle formControlName="key">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="control-label col-sm-12">
+                        Slo
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="number" style="min-width: 2em;" placeholder="2000"
+                            class="form-control form-control-md" validationStyle formControlName="slo">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="control-label col-sm-12">
+                        Units
+                    </label>
+                    <div class="col-sm-12">
+                        <input type="text" style="min-width: 2em;" placeholder="ms" class="form-control form-control-md"
+                            validationStyle formControlName="units">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="control-label col-sm-12">
+                        Comparison Operator
+                    </label>
+                    <div class="col-sm-12">
+                        <!--input type="text" style="min-width: 2em;" placeholder="le" class="form-control form-control-md"
+                            validationStyle formControlName="comparisonOperator"-->
+                            <select class="form-control" formControlName="comparisonOperator" validationStyle>
+                                    <option>le</option>
+                                    <option>lt</option>
+                                    <option>ge</option>
+                                    <option>gt</option>  
+                                    <option>eq</option>  
+                                    <option>ne</option>                                         
+                            </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="control-label col-sm-12">
+                        Criteria
+                    </label>
+                    <div class="col-sm-12">
+                      
+                        <json-input formControlName="criteria" ></json-input>
+                    </div>
+                </div>
+
+
+
+            </div>
+  
+
+
+
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="submit" (click)="onClickCancel()">
+            <i class="fa fas fa-window-close fa-1x"></i> Cancel</button>
+        <button class="btn btn-primary " type="submit" (click)="onUpdate()">
+            <i class="fa fas fa-save fa-1x"></i> Update Changes</button>
+
+    </div>
+
+
+    </form>
+    </div>
+</ng-template>

@@ -1,0 +1,320 @@
+<section class="col-md-12 page-header">
+    <h4 class="text-primary">
+        <i class="fas fa-cogs"></i>Configuration
+    </h4>
+    <hr />
+</section>
+
+<loader [loader]="loader"></loader>
+
+<div class="col-md-12 justify-content-end d-flex">
+    <button (click)="open(content)" class="btn btn-link ml-auto"><i class="fas fa-plus-circle"></i> Add new
+        product/app</button>
+</div>
+
+<div class="col-md-12">
+    <br />
+
+
+    <div class="col-md-12">
+        <div class="card" id="configView">
+            <div class="col-md-12" *ngFor="let item of configData">
+                <h6 class="text-primary"><strong><i class="fas fa-people-carry"></i> Team name: {{item?.name}}</strong>
+                </h6>
+                <hr />
+                <div class="col-md-12" *ngFor="let config of item.applications">
+                    <h6 class="text-primary"><strong><i class="fas fa-tablet-alt"></i>App name:
+                            {{config?.name}}</strong>
+                    </h6>
+                    <hr />
+                    <mat-accordion class="col-md-12" *ngFor="let service of config.services">
+
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>Service name: {{service?.name}}</mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-panel-description>
+
+                            </mat-panel-description>
+
+                            <mat-accordion *ngFor="let metadata of service.metadata" id="expander">
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            {{metadata?.name}}
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            {{metadata?.description}}
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <div class="col-md-12">
+                                        <div class="col-md-12 justify-content-end d-flex">
+                                            <button class="btn btn-link"
+                                                (click)="onClickUpdateMetadata(item.name,config.name,service.name,metadata)"><i
+                                                    class="far fa-edit"></i> Edit metadata</button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 card metaCard">
+                                                <strong>Endpoint</strong>
+                                                <br />
+                                                {{metadata?.endpoint}}
+                                            </div>
+                                            <div class="col-md-2 card  metaCard">
+                                                <strong>Prometheus Lable</strong>
+                                                <br />
+                                                {{metadata?.criteria | json}}
+                                            </div>
+                                            <div class="col-md-2 card  metaCard">
+                                                <strong>Slo</strong>
+                                                <br />
+                                                {{metadata?.slo}}
+                                            </div>
+                                            <div class="col-md-2 card  metaCard">
+                                                <strong>Key</strong>
+                                                <br />
+                                                {{metadata?.key}}
+                                            </div>
+                                            <div class="col-md-2 card  metaCard">
+                                                <strong>Units</strong>
+                                                <br />
+                                                {{metadata?.units}}
+                                            </div>
+                                            <div class="col-md-3 card  metaCard">
+                                                <strong>Comparison operator</strong>
+                                                <br />
+                                                {{metadata?.comparisonOperator}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add new config</h4>
+        <!--button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          span aria-hidden="true">&times;</span
+        </button>-->
+    </div>
+    <div class="modal-body">
+        <loader [loader]="saveLoader"></loader>
+        <form (validSubmit)="onSubmit()" [formGroup]="configForm">
+            <div class="col-md-12">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="control-label col-sm-12">
+                                Team Name
+                            </label>
+                            <div class="col-sm-12">
+                                <!--input type="text" style="min-width: 2em;" placeholder="Services"
+                                    class="form-control form-control-md" validationStyle formControlName="teamName"-->
+
+                                <select class="form-control" formControlName="teamName" validationStyle>
+                                    <option>Core Ticketing Services</option>
+                                    <option>TM1 Apps Maps</option>
+                                    <option>Host</option>
+                                </select>
+                                <!--ng-select class="custom-select form-control-sm" [items]="teams" [addTag]="addTagPromise" multiple="false" 
+                                    bindLabel="name"
+                                    bindValue="name"
+                                    validationStyle [loading]="loading" formControlName="teamName">
+                        </ng-select-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="control-label col-sm-12">
+                                App Name
+                            </label>
+                            <div class="col-sm-12">
+                                <input type="text" style="min-width: 2em;" placeholder="maps"
+                                    class="form-control form-control-md" validationStyle formControlName="name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <!--button (click)="addDynamicService()" class="btn btn-link"><i class="far fa-plus-square"></i>
+                            Add new service</button-->
+
+                    </div>
+
+                    <div class="col-md-12" formArrayName="services"
+                        *ngFor="let service of configForm.get('services').controls; let i = index;">
+                        <div class="col-md-12 justify-content-end d-flex">
+                            <button (click)="onClickRemoveService(i)" class="btn btn-link ml-auto" *ngIf="i>0"><i
+                                    class="far fa-minus-square"></i> remove this service
+                            </button>
+                        </div>
+                        <div class="col-md-12  card" [formGroupName]="i">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-12">
+                                    Service Name
+                                </label>
+                                <div class="col-sm-12">
+                                    <input type="text" style="min-width: 2em;"
+                                        placeholder="Vector Geometry Place Detail" class="form-control form-control-md"
+                                        validationStyle formControlName="name">
+                                </div>
+                            </div>
+
+                            <!--a [id]="i" (click)="addDynamicMetadata(i)" class="btn btn-link" style="float:right">Add metadata</a-->
+                            <div class="col-md-12">
+                                <button (click)="addDynamicMetadata(i)" class="btn btn-link"><i
+                                        class="far fa-plus-square"></i>
+                                    Add metadata</button>
+                            </div>
+                            <div class="form-group" formArrayName="metadata"
+                                *ngFor="let metadata of configForm.get('services').controls[i].get('metadata').controls; let j = index;">
+                                <div class="col-md-12 justify-content-end d-flex">
+                                    <button (click)=" onClickRemoveMetadata(i,j)" *ngIf="j>0"
+                                        class="btn btn-link ml-auto"><i class="far fa-minus-square"></i> Remove metadata
+                                    </button>
+                                </div>
+                                <div class="col-md-12  card" [formGroupName]="j">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="control-label col-sm-12">
+                                                Metadata key
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <input type="text" style="min-width: 2em;"
+                                                    placeholder="p95(/rest/geometry/3/event/{eventId}/placeDetail)"
+                                                    class="form-control form-control-md" validationStyle
+                                                    formControlName="name">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="control-label col-sm-12">
+                                                Metadata label
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <input type="text" style="min-width: 2em;" placeholder="p95"
+                                                    class="form-control form-control-md" validationStyle
+                                                    formControlName="description">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="control-label col-sm-12">
+                                                Endpoint
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <input type="text" style="min-width: 2em;"
+                                                    placeholder="http://prometheus.prd192-fed.prod3.us-east-1.tktm.io"
+                                                    class="form-control form-control-md" validationStyle
+                                                    formControlName="endpoint">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-12">
+                                            <label class="control-label col-sm-12">
+                                                Key
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <input type="text" style="min-width: 2em;"
+                                                    placeholder="maps_service_vector_geometry_place_detail_response_time"
+                                                    class="form-control form-control-md" validationStyle
+                                                    formControlName="key">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="control-label col-sm-12">
+                                                Slo
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <input type="number" style="min-width: 2em;" placeholder="2000"
+                                                    class="form-control form-control-md" validationStyle
+                                                    formControlName="slo">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="control-label col-sm-12">
+                                                Units
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <input type="text" style="min-width: 2em;" placeholder="ms"
+                                                    class="form-control form-control-md" validationStyle
+                                                    formControlName="units">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="control-label col-sm-12">
+                                                Comparison Operator
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <!--input type="text" style="min-width: 2em;" placeholder="le"
+                                                    class="form-control form-control-md" validationStyle
+                                                    formControlName="comparisonOperator"-->
+                                                <select class="form-control" formControlName="comparisonOperator" validationStyle>
+                                                    <option>le</option>
+                                                    <option>lt</option>
+                                                    <option>ge</option>
+                                                    <option>gt</option>
+                                                    <option>eq</option>
+                                                    <option>ne</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="control-label col-sm-12">
+                                                Criteria
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <!--textarea class="form-control" id="exampleTextarea"
+                                                    formControlName="criteria" 
+                                                    placeholder="{&quot;http_method&quot;:&quot;GET&quot;,&quot;path_pattern&quot;:&quot;/v1/event/_eventId_/inventory&quot;}" 
+                                                    rows="3"></textarea-->
+                                                <json-input formControlName="criteria"></json-input>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="modal-footer col-md-12 justify-content-end d-flex">
+                        <button class="btn btn-secondary" type="submit" (click)="onClickCancel()">
+                            <i class="fa fas fa-window-close fa-1x"></i> Cancel</button>
+                        <button class="btn btn-primary " type="submit" (click)="onSave()">
+                            <i class="fa fas fa-save fa-1x"></i> Save Changes</button>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<updateMetadata #updateMetadata></updateMetadata>
